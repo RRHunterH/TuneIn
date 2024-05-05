@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Search from '../../Search';
-import SearchResult from '../../SearchResult'; 
-import TicketResult from '../../TicketResult';
+import Search from '../Search';
+import SearchResult from '../Search/SearchResult'; 
+import TicketResult from '../Search/TicketResult';
 
 function MainSection() {
   const [searchResults, setSearchResults] = useState([]);
