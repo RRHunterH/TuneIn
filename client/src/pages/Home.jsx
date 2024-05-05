@@ -1,12 +1,17 @@
-import React from 'react';
+import { useQuery } from '@apollo/client';
 
-function HomePage() {
+import MainSection from '../components/MainSection';
+
+const Home = () => {
   return (
-    <div className="home-page">
-      <h1>Welcome to TuneIn</h1>
-      <p>Find your favorite music events and more!</p>
-    </div>
+    <main>
+      <div className="flex-row justify-center">
+        <div className="col-12 col-md-10 my-3">
+          <MainSection />
+        </div>
+      </div>
+    </main>
   );
-}
+};
 
-export default HomePage;
+export default Home;
