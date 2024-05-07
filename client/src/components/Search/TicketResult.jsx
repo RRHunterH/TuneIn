@@ -2,7 +2,7 @@ import React from 'react';
 
 function TicketResult({ results }) {
   if (!results || results.length === 0) {
-    return <div>No events found</div>; // Displays when no results are found
+    return;
   }
 
   return (
