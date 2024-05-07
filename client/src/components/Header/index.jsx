@@ -21,8 +21,8 @@ const Header = () => {
         <div>
           {Auth.loggedIn() ? (
             <>
-              <Link className="btn btn-lg btn-primary m-2" to="/profile">
-                View My Profile
+                <Link className="btn btn-lg btn-light m-2" onClick={logout} to="#">
+                <strong>View My Profile</strong>
               </Link>
               <span className="mx-2"> | </span>
               <Link className="btn btn-lg btn-light m-2" onClick={logout} to="#">
@@ -47,4 +47,3 @@ const Header = () => {
 };
 
 export default Header;
-
