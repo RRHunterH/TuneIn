@@ -1,7 +1,8 @@
+// index.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import Auth from '../../utils/auth';
+import HeaderImage from '../../assets/Tunein logo.png';
 
 const Header = () => {
   const logout = (event) => {
@@ -9,13 +10,29 @@ const Header = () => {
     Auth.logout();
   };
   return (
-    <header className="bg-info text-dark mb-4 py-3 display-flex align-center header-top">
-      <div className="container flex-column justify-space-between-lg justify-center align-center text-center">
-        <Link className="text-dark" to="/">
-          <h1 className="m-0" style={{ fontSize: '4rem' }}>
-            TuneIn
-          </h1>
-        </Link>
+   
+<header className="bg-info text-dark mb-4 py-3 display-flex align-center header-top">
+  <div className="container flex-column justify-center align-center text-center position-relative">
+    <Link className="text-dark" to="/">
+      {/* Logo */}
+      <img
+        src={HeaderImage}
+        alt="Tunein logo"
+        style={{
+          height: '200px', 
+          position: 'absolute',
+          top: '100px',
+          left: '50%', 
+          transform: 'translateX(-50%)',
+        }}
+      />
+    </Link>
+    <Link className="text-dark" to="/">
+      <h1 className="m-0" style={{ fontSize: '4rem', marginLeft: '10px' }}> {/* Add margin-left for spacing */}
+        TuneIn
+      </h1>
+    </Link>
+
       </div>
       <div className="container" style={{ position: 'absolute', left: '10px', top: '10px' }}>
         <div>
@@ -46,4 +63,12 @@ const Header = () => {
   );
 };
 
-export default Header;
+function App() {
+  return (
+    <div>
+      <Header /> 
+    </div>
+  );
+}
+
+export default App;
