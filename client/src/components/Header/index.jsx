@@ -12,10 +12,12 @@ const Header = () => {
     <header className="bg-info text-dark mb-4 py-3 display-flex align-center header-top">
       <div className="container flex-column justify-space-between-lg justify-center align-center text-center">
         <Link className="text-dark" to="/">
-          <h1 className="m-0" style={{ fontSize: '3rem' }}>
+          <h1 className="m-0" style={{ fontSize: '4rem' }}>
             TuneIn
           </h1>
         </Link>
+      </div>
+      <div className="container" style={{ position: 'absolute', left: '10px', top: '10px' }}>
         <div>
           {Auth.loggedIn() ? (
             <>
@@ -45,3 +47,4 @@ const Header = () => {
 };
 
 export default Header;
+
