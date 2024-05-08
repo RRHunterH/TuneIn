@@ -12,6 +12,20 @@ export const ADD_PROFILE = gql`
   }
 `;
 
+// export const ADD_FAVORIE_SONG = gql`
+//   mutation addLikedSong($profileId: ID!, $songId: ID!, $songTitle: String!, $artist: String!) {
+//     addLikedSong(userId: $profileId, songId: $songId, songTitle: $songTitle, artist: $artist) {
+//       _id
+//       name
+//       likedSongs {
+//         _id
+//         title
+//         artist
+//       }
+//     }
+//   }
+// `;
+
 // export const ADD_SKILL = gql`
 //   mutation addSkill($profileId: ID!, $skill: String!) {
 //     addSkill(profileId: $profileId, skill: $skill) {
