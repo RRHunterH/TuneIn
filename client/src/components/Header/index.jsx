@@ -21,17 +21,19 @@ const Header = () => {
         style={{
           height: '200px', 
           position: 'absolute',
-          top: '100px',
+          top: '40px',
           left: '50%', 
           transform: 'translateX(-50%)',
         }}
       />
     </Link>
     <Link className="text-dark" to="/">
-      <h1 className="m-0" style={{ fontSize: '4rem', marginLeft: '10px' }}> {/* Add margin-left for spacing */}
-        TuneIn
-      </h1>
-    </Link>
+  <h1 className="m-0" style={{ fontSize: '4rem', marginLeft: '10px' }}>
+    <span style={{display: 'inline-block' }}></span>
+  </h1>
+</Link>
+
+
 
       </div>
       <div className="container" style={{ position: 'absolute', left: '10px', top: '10px' }}>
