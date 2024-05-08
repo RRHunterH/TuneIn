@@ -40,7 +40,7 @@ const Header = () => {
         <div>
           {Auth.loggedIn() ? (
             <>
-                <Link className="btn btn-lg btn-light m-2" onClick={logout} to="#">
+                <Link className="btn btn-lg btn-primary m-2" to="/profile">
                 <strong>View My Profile</strong>
               </Link>
               <span className="mx-2"> | </span>
