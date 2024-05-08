@@ -7,12 +7,7 @@ const Footer = () => {
   const navigate = useNavigate();
   return (
     <footer className="footer">
-      {location.pathname !== '/' && (
-        <button className="btn btn-dark" onClick={() => navigate(-1)}>
-          &larr; Go Back
-        </button>
-      )}
-      <h4>2024 TuneIn</h4>
+      <div className='footer-text'> 2024 TuneIn</div>
     </footer>
   );
 };
