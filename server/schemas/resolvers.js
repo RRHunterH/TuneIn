@@ -1,50 +1,52 @@
-const { Profile } = require('../models');
-const { signToken, AuthenticationError } = require('../utils/auth');
+const User = require('./models/User');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const resolvers = {
   Query: {
-    profiles: async () => {
-      return Profile.find();
+    me: (_, __, { user }) => {
+      return User.findById(user.id);
     },
-
-    profile: async (parent, { profileId }) => {
-      return Profile.findOne({ _id: profileId });
+    getFavorites: (_, __, { user }) => {
+      return User.findById(user.id).populate('favorites');
     },
-    // By adding context to our query, we can retrieve the logged in user without specifically searching for them
-    me: async (parent, args, context) => {
-      if (context.user) {
-        return Profile.findOne({ _id: context.user._id });
-      }
-      throw AuthenticationError;
+    searchSongs: async (_, { keyword }) => {
+      // not sure what this is in the db
+      return searchSongsInDatabase(keyword);
     },
+    searchEvents: async (_, { keyword }) => {
+      // events
+      return searchEventsInDatabase(keyword);
+    }
   },
-
+  
   Mutation: {
-    addProfile: async (parent, { name, email, password }) => {
-      const profile = await Profile.create({ name, email, password });
-      const token = signToken(profile);
-
-      return { token, profile };
+    signUp: async (_, { username, email, password }) => {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = new User({ username, email, password: hashedPassword });
+      await user.save();
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      return { token, user };
     },
-    login: async (parent, { email, password }) => {
-      const profile = await Profile.findOne({ email });
-
-      if (!profile) {
-        throw AuthenticationError;
+    login: async (_, { email, password }) => {
+      const user = await User.findOne({ email });
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) {
+        throw new Error('Incorrect credentials');
       }
-
-      const correctPw = await profile.isCorrectPassword(password);
-
-      if (!correctPw) {
-        throw AuthenticationError;
-      }
-
-      const token = signToken(profile);
-      return { token, profile };
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      return { token, user };
     },
-
-
-  },
+    addFavorite: async (_, { songId, eventId }, { user }) => {
+      const favorite = { songId, eventId };
+      await User.findByIdAndUpdate(user.id, { $push: { favorites: favorite } });
+      return favorite;
+    },
+    removeFavorite: async (_, { favoriteId }, { user }) => {
+      await User.findByIdAndUpdate(user.id, { $pull: { favorites: { _id: favoriteId } } });
+      return { _id: favoriteId };
+    }
+  }
 };
 
 module.exports = resolvers;
