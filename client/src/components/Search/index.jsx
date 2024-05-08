@@ -15,7 +15,7 @@ function Search({ onSearch }) {
         type="text" 
         value={query} 
         onChange={(e) => setQuery(e.target.value)} 
-        placeholder="Search for lyrics" 
+        placeholder="Search here..." 
         className="search-input" 
       />
       <button type="submit" className="search-button">Search</button>
