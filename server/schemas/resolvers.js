@@ -1,14 +1,14 @@
-const User = require('./models/User');
+const Profile = require('../models/Profile');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const resolvers = {
   Query: {
-    me: (_, __, { user }) => {
-      return User.findById(user.id);
+    me: (_, __, { profile }) => {
+      return Profile.findById(profile.id);
     },
-    getFavorites: (_, __, { user }) => {
-      return User.findById(user.id).populate('favorites');
+    getFavorites: (_, __, { profile }) => {
+      return Profile.findById(profile.id).populate('favorites');
     },
     searchSongs: async (_, { keyword }) => {
       // not sure what this is in the db
@@ -23,27 +23,27 @@ const resolvers = {
   Mutation: {
     signUp: async (_, { username, email, password }) => {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new User({ username, email, password: hashedPassword });
-      await user.save();
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      return { token, user };
+      const profile = new Profile({ username, email, password: hashedPassword });
+      await profile.save();
+      const token = jwt.sign({ id: profile._id }, process.env.JWT_SECRET);
+      return { token, profile };
     },
     login: async (_, { email, password }) => {
-      const user = await User.findOne({ email });
-      const valid = await bcrypt.compare(password, user.password);
+      const profile = await Profile.findOne({ email });
+      const valid = await bcrypt.compare(password, profile.password);
       if (!valid) {
         throw new Error('Incorrect credentials');
       }
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      return { token, user };
+      const token = jwt.sign({ id: profile._id }, process.env.JWT_SECRET);
+      return { token, profile };
     },
-    addFavorite: async (_, { songId, eventId }, { user }) => {
+    addFavorite: async (_, { songId, eventId }, { profile }) => {
       const favorite = { songId, eventId };
-      await User.findByIdAndUpdate(user.id, { $push: { favorites: favorite } });
+      await Profile.findByIdAndUpdate(profile.id, { $push: { favorites: favorite } });
       return favorite;
     },
-    removeFavorite: async (_, { favoriteId }, { user }) => {
-      await User.findByIdAndUpdate(user.id, { $pull: { favorites: { _id: favoriteId } } });
+    removeFavorite: async (_, { favoriteId }, { profile }) => {
+      await Profile.findByIdAndUpdate(profile.id, { $pull: { favorites: { _id: favoriteId } } });
       return { _id: favoriteId };
     }
   }
