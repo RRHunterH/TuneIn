@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Search from '../Search';
 import SearchResult from '../Search/SearchResult'; 
 import TicketResult from '../Search/TicketResult';
+import './MainSection.css'
 
 function MainSection() {
   const [searchResults, setSearchResults] = useState([]);
@@ -44,7 +45,7 @@ function MainSection() {
   };
 
   return (
-    <div>
+    <div className='main-section'>
       <h1>Search Lyrics</h1>
       <Search onSearch={handleLyricsSearch} />
       <SearchResult results={searchResults} />

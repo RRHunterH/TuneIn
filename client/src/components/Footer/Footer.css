@@ -1,22 +1,32 @@
 .footer {
   position: fixed;
-  bottom: 0;
+  bottom: 20px;
   left: 0;
   width: 100%;
-  height: 100vh;  
-  background-image: url('src/assets/background.png'); 
-  background-size: cover;
-  background-position: center;
-  display: flex;
+  height: auto;  
+  display: inline-flex;
   flex-direction: column;
   justify-content: flex-end;  
   text-align: center; 
-  z-index: -1;  
+  z-index: 0;  
 }
 
-.footer h4 {
-  margin-top: auto;  
-  width: 100%;  
-  padding: 20px 0;  
+.footer p {
+  font-size: medium;
+  font-weight: bolder;
 }
 
+.names {
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.names a {
+
+  padding: auto;
+  margin: auto;
+  font-size: small;
+  font-weight:600
+
+}
