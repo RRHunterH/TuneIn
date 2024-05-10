@@ -1,53 +1,45 @@
-import { Navigate, useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-
-// import SkillsList from '../components/SkillsList';
-// import SkillForm from '../components/SkillForm';
-
+import React from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
+import { ADD_FAVORITE_SONG, ADD_EVENT } from '../utils/mutations';
 
-import Auth from '../utils/auth';
+const ProfilePage = () => {
+  const { loading, data } = useQuery(QUERY_ME);
+  const [addFavoriteSong] = useMutation(ADD_FAVORITE_SONG);
+  const [addEvent] = useMutation(ADD_EVENT);
 
-const Profile = () => {
-  const { profileId } = useParams();
+  if (loading) return <div>Loading...</div>;
+  if (!data || !data.me) return <div>Error: Unable to fetch profile data</div>;
 
-  const { loading, data } = useQuery(
-    QUERY_ME,
-    {
-      variables: { profileId: profileId },
-    }
-  );
-
-  // Check if data is returning from the `QUERY_ME` query, then the `QUERY_SINGLE_PROFILE` query
-  const profile = data?.me || data?.profile || {};
-
-  // Use React Router's `<Redirect />` component to redirect to personal profile page if username is yours
-  if (Auth.loggedIn() && Auth.getProfile().data._id === profileId) {
-    return <Navigate to="/profile" />;
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!profile?.name) {
-    return (
-      <h4>
-        You need to be logged in to see your profile page. Use the navigation
-        links above to sign up or log in!
-      </h4>
-    );
-  }
+  const { me: profile } = data;
 
   return (
     <div>
-      <h2 className="card-header">
-        Songs you like:
-      </h2>
+      <h1>Welcome, {profile.name}</h1>
 
+      <h2>Your Favorite Songs</h2>
+      <ul>
+        {profile.favoriteSongs.map(song => (
+          <li key={song._id}>
+            {song.title} - {song.artist}
+          </li>
+        ))}
+      </ul>
 
+      <h2>Your Favorite Events</h2>
+      <ul>
+        {profile.favoriteEvents.map(event => (
+          <li key={event._id}>
+            {event.eventName} - {event.eventDate} - {event.location}
+          </li>
+        ))}
+      </ul>
+
+      <button onClick={() => handleFavoriteSong(songId, songTitle, artist)}>Add Favorite Song</button>
+
+      <button onClick={() => handleFavoriteEvent(eventName, eventDate, location)}>Add Favorite Event</button>
     </div>
   );
 };
 
-export default Profile;
+export default ProfilePage;
