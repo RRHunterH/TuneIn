@@ -41,12 +41,12 @@ TuneIn is an app that was created for the purpose of finding music & events for 
 
 ## Collaborators
 
-[Kristie Fisher](https://github.com/FisherK19)
-[Hunter Hurst](https://github.com/RRHunterH)
-[Emily Ciarabellini](https://github.com/ECiarabellini)
-[Toshie Araki](https://github.com/tmaraki)
-[Emily Coleman](https://github.com/ebcoleman)
-[Katelynn McManus](https://github.com/KatelynnMM)
-[Austin Lewandowski](https://github.com/austin109lew)
+- [Kristie Fisher](https://github.com/FisherK19)
+- [Hunter Hurst](https://github.com/RRHunterH)
+- [Emily Ciarabellini](https://github.com/ECiarabellini)
+- [Toshie Araki](https://github.com/tmaraki)
+- [Emily Coleman](https://github.com/ebcoleman)
+- [Katelynn McManus](https://github.com/KatelynnMM)
+- [Austin Lewandowski](https://github.com/austin109lew)
 
 2024 TuneIn
