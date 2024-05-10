@@ -1,52 +1,92 @@
-const User = require('./models/User');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const { Profile } = require('../models');
+const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
   Query: {
-    me: (_, __, { user }) => {
-      return User.findById(user.id);
+    profiles: async () => {
+      return Profile.find();
     },
-    getFavorites: (_, __, { user }) => {
-      return User.findById(user.id).populate('favorites');
+    profile: async (parent, { profileId }) => {
+      return Profile.findOne({ _id: profileId });
     },
-    searchSongs: async (_, { keyword }) => {
-      // not sure what this is in the db
-      return searchSongsInDatabase(keyword);
-    },
-    searchEvents: async (_, { keyword }) => {
-      // events
-      return searchEventsInDatabase(keyword);
-    }
-  },
-  
-  Mutation: {
-    signUp: async (_, { username, email, password }) => {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new User({ username, email, password: hashedPassword });
-      await user.save();
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      return { token, user };
-    },
-    login: async (_, { email, password }) => {
-      const user = await User.findOne({ email });
-      const valid = await bcrypt.compare(password, user.password);
-      if (!valid) {
-        throw new Error('Incorrect credentials');
+    me: async (parent, args, context) => {
+      if (context.user) {
+        return Profile.findOne({ _id: context.user._id });
       }
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      return { token, user };
+      throw new AuthenticationError('You are not authenticated');
     },
-    addFavorite: async (_, { songId, eventId }, { user }) => {
-      const favorite = { songId, eventId };
-      await User.findByIdAndUpdate(user.id, { $push: { favorites: favorite } });
-      return favorite;
+  },
+
+  Mutation: {
+    addProfile: async (parent, { name, email, password }) => {
+      const profile = await Profile.create({ name, email, password });
+      const token = signToken(profile);
+      return { token, profile };
     },
-    removeFavorite: async (_, { favoriteId }, { user }) => {
-      await User.findByIdAndUpdate(user.id, { $pull: { favorites: { _id: favoriteId } } });
-      return { _id: favoriteId };
-    }
-  }
+    login: async (parent, { email, password }) => {
+      const profile = await Profile.findOne({ email });
+
+      if (!profile) {
+        throw new AuthenticationError('Incorrect email or password');
+      }
+
+      const correctPw = await profile.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw new AuthenticationError('Incorrect email or password');
+      }
+
+      const token = signToken(profile);
+      return { token, profile };
+    },
+
+    addFavoriteSong: async (parent, { profileId, songId, songTitle, artist }) => {
+      try {
+        // Find the profile by ID
+        const profile = await Profile.findById(profileId);
+
+        if (!profile) {
+          throw new Error('Profile not found');
+        }
+
+        // Add the favorite song to the profile
+        profile.favoriteSongs.push({ _id: songId, title: songTitle, artist });
+
+        // Save the updated profile
+        await profile.save();
+
+        return profile;
+      } catch (error) {
+        console.error('Error adding favorite song:', error);
+        throw new Error('Failed to add favorite song');
+      }
+    },
+
+    addEvent: async (parent, { profileId, eventName, eventDate, location }) => {
+      try {
+        // Find the profile by ID
+        const profile = await Profile.findById(profileId);
+
+        if (!profile) {
+          throw new Error('Profile not found');
+        }
+
+        // Add the event to the profile
+        profile.events.push({ eventName, eventDate, location });
+
+        // Save the updated profile
+        await profile.save();
+
+        return profile;
+      } catch (error) {
+        console.error('Error adding event:', error);
+        throw new Error('Failed to add event');
+      }
+    },
+  },
 };
 
 module.exports = resolvers;
+
+
+

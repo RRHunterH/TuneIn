@@ -1,21 +1,38 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import './Footer.css';
 
-const Footer = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+function Footer() {
   return (
     <footer className="footer">
-      {location.pathname !== '/' && (
-        <button className="btn btn-dark" onClick={() => navigate(-1)}>
-          &larr; Go Back
-        </button>
-      )}
-      <h4>2024 TuneIn</h4>
+      <div>
+      <p>TuneIn | Created by:</p>
+      </div>
+      
+      <div className='names'>
+        <a href='https://github.com/RRHunterH' 
+          target="_blank" >Hunter H.</a>
+
+        <a href='https://github.com/FisherK19'
+          target="_blank" >Kristie F.</a>
+
+        <a href='https://github.com/tmaraki' 
+          target="_blank" >Toshie A.</a>
+
+        <a href='https://github.com/ECiarabellini'
+          target="_blank" >Emily Ciarabellini</a>
+
+        <a href='https://github.com/KatelynnMM'
+          target="_blank" >Katelynn M.</a>
+
+        <a href='https://github.com/ebcoleman'
+          target="_blank" >Emily Coleman</a>
+
+        <a href='https://github.com/austin109lew'
+          target="_blank" >Austin L.</a>
+      </div> 
+          
     </footer>
   );
-};
+}
 
 export default Footer;
-

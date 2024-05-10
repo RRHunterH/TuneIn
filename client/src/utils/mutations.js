@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+
 export const ADD_PROFILE = gql`
   mutation addProfile($name: String!, $email: String!, $password: String!) {
     addProfile(name: $name, email: $email, password: $password) {
@@ -10,71 +11,44 @@ export const ADD_PROFILE = gql`
     }
   }
 `;
-export const SIGN_UP = gql`
-  mutation signUp($username: String!, $email: String!, $password: String!) {
-    signUp(username: $username, email: $email, password: $password) {
-      token
-      user {
-        _id
-        username
-      }
-    }
-  }
-`;
+
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
-      user {
+      profile {
         _id
-        username
+        name
       }
     }
   }
 `;
-export const ADD_FAVORITE = gql`
-  mutation addFavorite($songId: String, $eventId: String) {
-    addFavorite(songId: $songId, eventId: $eventId) {
+
+export const ADD_FAVORITE_SONG = gql`
+  mutation addFavoriteSong($profileId: ID!, $songId: ID!, $songTitle: String!, $artist: String!) {
+    addFavoriteSong(profileId: $profileId, songId: $songId, songTitle: $songTitle, artist: $artist) {
       _id
-      songTitle
-      eventTitle
+      name
+      favoriteSongs {
+        _id
+        title
+        artist
+      }
     }
   }
 `;
-export const REMOVE_FAVORITE = gql`
-  mutation removeFavorite($favoriteId: ID!) {
-    removeFavorite(favoriteId: $favoriteId) {
+
+export const ADD_EVENT = gql`
+  mutation addEvent($profileId: ID!, $eventName: String!, $eventDate: String!, $location: String!) {
+    addEvent(profileId: $profileId, eventName: $eventName, eventDate: $eventDate, location: $location) {
       _id
+      name
+      events {
+        _id
+        name
+        date
+        location
+      }
     }
   }
 `;
-
-
-
-// export const ADD_FAVORITE_EVENT = gql`
-//   mutation addFavoriteEvent($profileId: ID!, $songId: ID!, $songTitle: String!, $artist: String!) {
-//     addFavoriteEvent(profileId: $profileId, songId: $songId, songTitle: $songTitle, artist: $artist) {
-//       _id
-//       name
-//       likedSongs {
-//         _id
-//         title
-//         artist
-//       }
-//     }
-//   }
-// `;
-
-// export const REMOVE_FAVORITE_EVENT = gql`
-//   mutation addFavoriteEvent($profileId: ID!, $songId: ID!, $songTitle: String!, $artist: String!) {
-//     addFavoriteEvent(profileId: $profileId, songId: $songId, songTitle: $songTitle, artist: $artist) {
-//       _id
-//       name
-//       likedSongs {
-//         _id
-//         title
-//         artist
-//       }
-//     }
-//   }
-// `;

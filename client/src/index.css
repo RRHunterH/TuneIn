@@ -1,3 +1,4 @@
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -5,7 +6,10 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* background-color: #242424; */
+  background-image: url('src/assets/background.png'); 
+  background-size: cover;
+  background-position: center;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,8 +22,9 @@ a {
   color: #ffffff;
   text-decoration: inherit;
 }
+
 a:hover {
-  color: #535bf2;
+  color: rgb(191 85 80);
 }
 
 body {
@@ -33,6 +38,20 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+.header-text {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 3em;
+}
+
+.footer-text {
+  font-size: 1em;
+  font-weight: 700;
+  margin-bottom: 2%;
 }
 
 button {
@@ -65,4 +84,16 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-input {
+  margin-bottom: 2%;
+  font-size: 1.6em;
+
 }

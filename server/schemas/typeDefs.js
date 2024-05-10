@@ -1,46 +1,43 @@
-const { gql } = require('apollo-server-express');
+const typeDefs = `
+  type Profile {
+    _id: ID
+    name: String
+    email: String
+    password: String
+    favoriteSongs: [Song]    # New field for favorite songs
+    events: [Event]          # New field for events
+  }
 
-const typeDefs = gql`
-  type User {
-    _id: ID
-    username: String!
-    email: String!
-    favorites: [Favorite]!
-  }
-  type Favorite {
-    _id: ID
-    songId: String
-    eventId: String
-    songTitle: String
-    eventTitle: String
-  }
-  type AuthPayload {
-    token: String
-    user: User
-  }
   type Song {
-    _id: ID
-    title: String
-    lyrics: String
-    artist: String
+    _id: ID!
+    title: String!
+    artist: String!
   }
+
   type Event {
-    _id: ID
-    title: String
-    date: String
-    venue: String
+    _id: ID!
+    eventName: String!
+    eventDate: String!
+    location: String!
   }
+
+  type Auth {
+    token: ID!
+    profile: Profile
+  }
+
   type Query {
-    me: User
-    getFavorites: [Favorite]
-    searchSongs(keyword: String!): [Song]
-    searchEvents(keyword: String!): [Event]
+    profiles: [Profile]!
+    profile(profileId: ID!): Profile
+    # Because we have the context functionality in place to check a JWT and decode its data, we can use a query that will always find and return the logged in user's data
+    me: Profile
   }
+
   type Mutation {
-    signUp(username: String!, email: String!, password: String!): AuthPayload
-    login(email: String!, password: String!): AuthPayload
-    addFavorite(songId: String, eventId: String): Favorite
-    removeFavorite(favoriteId: ID!): Favorite
+    addProfile(name: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    addFavoriteSong(profileId: ID!, songId: ID!, songTitle: String!, artist: String!): Profile   # New mutation for adding favorite songs
+    addEvent(profileId: ID!, eventName: String!, eventDate: String!, location: String!): Profile   # New mutation for adding events
   }
 `;
 
