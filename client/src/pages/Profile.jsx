@@ -14,7 +14,7 @@ const Profile = () => {
   const { loading, data } = useQuery(
     QUERY_ME,
     {
-      variables: { profileId: profileId },
+      variables: { profileId: profileId },      
     }
   );
 
