@@ -1,67 +1,43 @@
 import React from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
-import { ADD_FAVORITE_SONG, ADD_EVENT } from '../utils/mutations';
+import Auth from '../utils/auth';
+import FavoriteButton from '../components/Search/FavoriteButton';
 
-const ProfilePage = () => {
-  const { loading, data } = useQuery(QUERY_ME);
-  const [addFavoriteSong] = useMutation(ADD_FAVORITE_SONG);
-  const [addEvent] = useMutation(ADD_EVENT);
+const Profile = () => {
+  // Fetch the logged-in user's profile data using QUERY_ME
+  const { loading, data, error } = useQuery(QUERY_ME);
 
-  const handleFavoriteSong = async (songId, songTitle, artist) => {
-    try {
-      await addFavoriteSong({
-        variables: { profileId: data?.me?._id, songId, songTitle, artist },
-        refetchQueries: [{ query: QUERY_ME }],
-      });
-    } catch (error) {
-      console.error('Error adding favorite song:', error);
-    }
-  };
-
-  const handleFavoriteEvent = async (eventName, eventDate, location) => {
-    try {
-      await addEvent({
-        variables: { profileId: data?.me?._id, eventName, eventDate, location },
-        refetchQueries: [{ query: QUERY_ME }],
-      });
-    } catch (error) {
-      console.error('Error adding favorite event:', error);
-    }
-  };
+  if (!Auth.loggedIn()) {
+    window.location.href = '/login';
+    return;
+  }
 
   if (loading) return <div>Loading...</div>;
-  if (!data || !data.me) return <div>Error: Unable to fetch profile data</div>;
+  if (error) return <div>Error fetching profile: {error.message}</div>;
+  if (!data || !data.me) return <div>Profile not found.</div>;
 
-  const { me: profile } = data;
+  const profile = data.me;
 
   return (
     <div>
-      <h1>Welcome, {profile.name}</h1>
-
+      <h1>Profile: {profile.name}</h1>
+      <p>Email: {profile.email}</p>
       <h2>Your Favorite Songs</h2>
       <ul>
-        {profile.favoriteSongs.map(song => (
+        {profile.favoriteSongs?.map(song => (
           <li key={song._id}>
             {song.title} - {song.artist}
+            <FavoriteButton 
+              profileId={profile._id} 
+              songId={song._id} 
+              isFavorite={true}
+            />
           </li>
         ))}
       </ul>
-
-      <h2>Your Favorite Events</h2>
-      <ul>
-        {profile.favoriteEvents.map(event => (
-          <li key={event._id}>
-            {event.eventName} - {event.eventDate} - {event.location}
-          </li>
-        ))}
-      </ul>
-
-      <button onClick={() => handleFavoriteSong(songId, songTitle, artist)}>Add Favorite Song</button>
-
-      <button onClick={() => handleFavoriteEvent(eventName, eventDate, location)}>Add Favorite Event</button>
     </div>
   );
 };
 
-export default ProfilePage;
+export default Profile;

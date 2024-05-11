@@ -5,7 +5,7 @@ export const QUERY_PROFILES = gql`
     profiles {
       _id
       name
-      skills
+      email 
     }
   }
 `;
@@ -15,7 +15,7 @@ export const QUERY_SINGLE_PROFILE = gql`
     profile(profileId: $profileId) {
       _id
       name
-      skills
+      email  
     }
   }
 `;
@@ -25,17 +25,34 @@ export const QUERY_ME = gql`
     me {
       _id
       name
-      skills
+      email  
     }
   }
 `;
 
-export const GET_SONG = gql`
-  query {
-    favoriteSong {
+export const GET_FAVORITE_SONGS = gql`
+  query getFavoriteSongs {
+    me {
       _id
-      title
-      artist
+      favoriteSongs {
+        _id
+        title
+        artist
+      }
+    }
+  }
+`;
+
+export const GET_FAVORITE_EVENTS = gql`
+  query getFavoriteEvents {
+    me {
+      _id
+      favoriteEvents {
+        _id
+        eventName
+        eventDate
+        location
+      }
     }
   }
 `;

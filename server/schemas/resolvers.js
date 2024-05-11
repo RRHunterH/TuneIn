@@ -1,5 +1,6 @@
 const { Profile } = require('../models');
-const { signToken, AuthenticationError } = require('../utils/auth');
+const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require('apollo-server-express'); // Correct import
 
 const resolvers = {
   Query: {
@@ -10,10 +11,10 @@ const resolvers = {
       return Profile.findOne({ _id: profileId });
     },
     me: async (parent, args, context) => {
-      if (context.user) {
-        return Profile.findOne({ _id: context.user._id });
+      if (!context.user) {
+        throw new AuthenticationError('You are not authenticated'); // Correct usage
       }
-      throw new AuthenticationError('You are not authenticated');
+      return Profile.findOne({ _id: context.user._id });
     },
   },
 
@@ -27,13 +28,13 @@ const resolvers = {
       const profile = await Profile.findOne({ email });
 
       if (!profile) {
-        throw new AuthenticationError('Incorrect email or password');
+        throw new AuthenticationError('Incorrect email or password'); // Correct usage
       }
 
       const correctPw = await profile.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect email or password');
+        throw new AuthenticationError('Incorrect email or password'); // Correct usage
       }
 
       const token = signToken(profile);
@@ -42,17 +43,13 @@ const resolvers = {
 
     addFavoriteSong: async (parent, { profileId, songId, songTitle, artist }) => {
       try {
-        // Find the profile by ID
         const profile = await Profile.findById(profileId);
 
         if (!profile) {
           throw new Error('Profile not found');
         }
 
-        // Add the favorite song to the profile
         profile.favoriteSongs.push({ _id: songId, title: songTitle, artist });
-
-        // Save the updated profile
         await profile.save();
 
         return profile;
@@ -64,17 +61,13 @@ const resolvers = {
 
     addEvent: async (parent, { profileId, eventName, eventDate, location }) => {
       try {
-        // Find the profile by ID
         const profile = await Profile.findById(profileId);
 
         if (!profile) {
           throw new Error('Profile not found');
         }
 
-        // Add the event to the profile
         profile.events.push({ eventName, eventDate, location });
-
-        // Save the updated profile
         await profile.save();
 
         return profile;
@@ -83,10 +76,45 @@ const resolvers = {
         throw new Error('Failed to add event');
       }
     },
+
+    removeFavoriteSong: async (parent, { profileId, songId }) => {
+      try {
+        const profile = await Profile.findById(profileId);
+
+        if (!profile) {
+          throw new Error('Profile not found');
+        }
+
+        profile.favoriteSongs = profile.favoriteSongs.filter(song => song._id.toString() !== songId);
+        await profile.save();
+
+        return profile;
+      } catch (error) {
+        console.error('Error removing favorite song:', error);
+        throw new Error('Failed to remove favorite song');
+      }
+    },
+
+    removeEvent: async (parent, { profileId, eventId }) => {
+      try {
+        const profile = await Profile.findById(profileId);
+
+        if (!profile) {
+          throw new Error('Profile not found');
+        }
+
+        profile.events = profile.events.filter(event => event._id.toString() !== eventId);
+        await profile.save();
+
+        return profile;
+      } catch (error) {
+        console.error('Error removing event:', error);
+        throw new Error('Failed to remove event');
+      }
+    },
   },
 };
 
 module.exports = resolvers;
-
 
 
