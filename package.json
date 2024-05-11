@@ -17,8 +17,12 @@
     "concurrently": "^5.1.0"
   },
   "dependencies": {
-    "@apollo/client": "^3.10.2",
-    "dotenv": "^16.4.5",
-    "jwt-decode": "^4.0.0"
+    "@apollo/client": "^3.7.15",
+    "apollo-server": "^3.13.0",
+    "axios": "^1.6.8",
+    "graphql": "^16.8.1",
+    "jwt-decode": "^4.0.0",
+    "mongodb": "^6.6.1",
+    "mongoose": "^8.3.4"
   }
 }

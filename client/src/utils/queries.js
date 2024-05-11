@@ -29,3 +29,13 @@ export const QUERY_ME = gql`
     }
   }
 `;
+
+export const GET_SONG = gql`
+  query {
+    favoriteSong {
+      _id
+      title
+      artist
+    }
+  }
+`;

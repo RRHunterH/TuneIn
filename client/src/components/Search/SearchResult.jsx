@@ -1,4 +1,5 @@
 import React from 'react';
+import FavoriteButton from './FavoriteButton';
 
 function SearchResult({ results }) {
   return (
@@ -13,9 +14,7 @@ function SearchResult({ results }) {
             </div>
           </div>
           <div style={{ marginTop: '10px', textAlign: 'right' }}>
-            <button className="favorite-button" style={{ padding: '5px', fontSize: '14px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer' }}>
-              💙
-            </button>
+            <FavoriteButton songId={result.result.id} /> {/* Pass necessary props */}
           </div>
         </div>
       ))}
