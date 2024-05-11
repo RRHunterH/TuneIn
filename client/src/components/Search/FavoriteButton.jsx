@@ -32,4 +32,6 @@ const FavoriteButton = ({ profileId, songId, isFavorite }) => {
     </button>
   );
 };
+
 export default FavoriteButton;
+

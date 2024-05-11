@@ -18,7 +18,20 @@ const profileSchema = new Schema({
     type: String,
     required: true,
     minlength: 5,
-  }
+  },
+  favoriteSongs: [
+    {
+      title: String,
+      artist: String,
+    }
+  ],
+  events: [
+    {
+      eventName: String,
+      eventDate: String,
+      location: String,
+    }
+  ]
 });
 
 // set up pre-save middleware to create password
@@ -39,3 +52,4 @@ profileSchema.methods.isCorrectPassword = async function (password) {
 const Profile = model('Profile', profileSchema);
 
 module.exports = Profile;
+
