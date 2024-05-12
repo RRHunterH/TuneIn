@@ -1,7 +1,7 @@
-// resolvers.js
 const { Profile } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
+const { ObjectId } = require('mongoose').Types;
 
 const resolvers = {
   Query: {
@@ -13,7 +13,7 @@ const resolvers = {
     },
     me: async (parent, args, context) => {
       if (!context.user) {
-        throw new AuthenticationError('Not authenticated');
+        throw new AuthenticationError('You need to be logged in!');
       }
       return Profile.findOne({ _id: context.user._id });
     },
@@ -29,53 +29,57 @@ const resolvers = {
       if (!profile) {
         throw new AuthenticationError('Incorrect credentials');
       }
+
       const correctPw = await profile.isCorrectPassword(password);
       if (!correctPw) {
         throw new AuthenticationError('Incorrect credentials');
       }
+
       const token = signToken(profile);
       return { token, profile };
     },
-    addFavoriteSong: async (parent, { profileId, songId, songTitle, artist }) => {
-      const profile = await Profile.findById(profileId);
-      if (!profile) {
-        throw new Error('Profile not found');
+    addFavoriteSong: async (parent, { profileId, songId, songTitle, artist }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
       }
-      profile.favoriteSongs.push({ _id: songId, title: songTitle, artist });
-      await profile.save();
-      return profile;
-    },
-    addEvent: async (parent, { profileId, eventName, eventDate, location }) => {
-      const profile = await Profile.findById(profileId);
-      if (!profile) {
-        throw new Error('Profile not found');
+
+      const validSongId = ObjectId.isValid(songId) ? new ObjectId(songId) : null;
+      if (!validSongId) {
+        throw new Error('Invalid songId provided');
       }
-      profile.events.push({ eventName, eventDate, location });
-      await profile.save();
-      return profile;
+
+      const updatedProfile = await Profile.findByIdAndUpdate(
+        profileId,
+        { $push: { favoriteSongs: { _id: validSongId, title: songTitle, artist } } },
+        { new: true, runValidators: true }
+      );
+
+      return updatedProfile;
     },
-    removeFavoriteSong: async (parent, { profileId, songId }) => {
-      const profile = await Profile.findById(profileId);
-      if (!profile) {
-        throw new Error('Profile not found');
+    removeFavoriteSong: async (parent, { profileId, songId }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
       }
-      profile.favoriteSongs = profile.favoriteSongs.filter(song => song._id.toString() !== songId);
-      await profile.save();
-      return profile;
-    },
-    removeEvent: async (parent, { profileId, eventId }) => {
-      const profile = await Profile.findById(profileId);
-      if (!profile) {
-        throw new Error('Profile not found');
+
+      const validSongId = ObjectId.isValid(songId) ? new ObjectId(songId) : null;
+      if (!validSongId) {
+        throw new Error('Invalid songId provided');
       }
-      profile.events = profile.events.filter(event => event._id.toString() !== eventId);
-      await profile.save();
-      return profile;
+
+      const updatedProfile = await Profile.findByIdAndUpdate(
+        profileId,
+        { $pull: { favoriteSongs: { _id: validSongId } } },
+        { new: true }
+      );
+
+      return updatedProfile;
     },
+    // Include other mutations if necessary
   },
 };
 
 module.exports = resolvers;
+
 
 
 
