@@ -1,67 +1,41 @@
 import React from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { QUERY_ME } from '../utils/queries';
-import { ADD_FAVORITE_SONG, ADD_EVENT } from '../utils/mutations';
+import { useQuery, gql } from '@apollo/client';
 
-const ProfilePage = () => {
-  const { loading, data } = useQuery(QUERY_ME);
-  const [addFavoriteSong] = useMutation(ADD_FAVORITE_SONG);
-  const [addEvent] = useMutation(ADD_EVENT);
-
-  const handleFavoriteSong = async (songId, songTitle, artist) => {
-    try {
-      await addFavoriteSong({
-        variables: { profileId: data?.me?._id, songId, songTitle, artist },
-        refetchQueries: [{ query: QUERY_ME }],
-      });
-    } catch (error) {
-      console.error('Error adding favorite song:', error);
+const QUERY_ME = gql`
+  query Me {
+    me {
+      _id
+      name
+      email
+      favoriteSongs {
+        _id
+        title
+        artist
+      }
     }
-  };
+  }
+`;
 
-  const handleFavoriteEvent = async (eventName, eventDate, location) => {
-    try {
-      await addEvent({
-        variables: { profileId: data?.me?._id, eventName, eventDate, location },
-        refetchQueries: [{ query: QUERY_ME }],
-      });
-    } catch (error) {
-      console.error('Error adding favorite event:', error);
-    }
-  };
+function Profile() {
+  const { loading, error, data } = useQuery(QUERY_ME);
 
-  if (loading) return <div>Loading...</div>;
-  if (!data || !data.me) return <div>Error: Unable to fetch profile data</div>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
-  const { me: profile } = data;
+  const { me } = data;
 
   return (
     <div>
-      <h1>Welcome, {profile.name}</h1>
-
+      <h1>Profile: {me.name}</h1>
+      <p>Email: {me.email}</p>
       <h2>Your Favorite Songs</h2>
       <ul>
-        {profile.favoriteSongs.map(song => (
-          <li key={song._id}>
-            {song.title} - {song.artist}
-          </li>
+        {me.favoriteSongs.map(song => (
+          <li key={song._id}>{song.title} by {song.artist}</li>
         ))}
       </ul>
-
-      <h2>Your Favorite Events</h2>
-      <ul>
-        {profile.favoriteEvents.map(event => (
-          <li key={event._id}>
-            {event.eventName} - {event.eventDate} - {event.location}
-          </li>
-        ))}
-      </ul>
-
-      <button onClick={() => handleFavoriteSong(songId, songTitle, artist)}>Add Favorite Song</button>
-
-      <button onClick={() => handleFavoriteEvent(eventName, eventDate, location)}>Add Favorite Event</button>
     </div>
   );
-};
+}
 
-export default ProfilePage;
+export default Profile;

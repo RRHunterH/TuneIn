@@ -5,7 +5,7 @@ export const QUERY_PROFILES = gql`
     profiles {
       _id
       name
-      skills
+      email 
     }
   }
 `;
@@ -15,27 +15,30 @@ export const QUERY_SINGLE_PROFILE = gql`
     profile(profileId: $profileId) {
       _id
       name
-      skills
+      email  
     }
   }
 `;
+
 
 export const QUERY_ME = gql`
   query me {
     me {
       _id
       name
-      skills
+      email
+      favoriteSongs {
+        _id
+        title
+        artist
+      }
+      favoriteEvents {
+        _id
+        eventName
+        eventDate
+        location
+      }
     }
   }
 `;
 
-export const GET_SONG = gql`
-  query {
-    favoriteSong {
-      _id
-      title
-      artist
-    }
-  }
-`;
