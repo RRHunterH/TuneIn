@@ -1,3 +1,4 @@
+// typeDefs.js
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
@@ -5,8 +6,8 @@ const typeDefs = gql`
     _id: ID
     name: String
     email: String
-    favoriteSongs: [Song]   
-    events: [Event]          
+    favoriteSongs: [Song]
+    events: [Event]
   }
 
   type Song {
@@ -44,4 +45,5 @@ const typeDefs = gql`
 `;
 
 module.exports = typeDefs;
+
 

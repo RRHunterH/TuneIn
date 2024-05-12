@@ -25,18 +25,16 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_FAVORITE_SONG = gql`
-  mutation addFavoriteSong($profileId: ID!, $songId: ID!, $songTitle: String!, $artist: String!) {
-    addFavoriteSong(profileId: $profileId, songId: $songId, songTitle: $songTitle, artist: $artist) {
-      _id
-      name
-      favoriteSongs {
-        _id
-        title
-        artist
-      }
+  mutation AddFavoriteSong($songId: ID!) {
+    addFavoriteSong(songId: $songId) {
+      id
+      title
+      artist
     }
   }
 `;
+
+
 
 export const ADD_EVENT = gql`
   mutation addEvent($profileId: ID!, $eventName: String!, $eventDate: String!, $location: String!) {
@@ -54,10 +52,9 @@ export const ADD_EVENT = gql`
 `;
 
 export const REMOVE_FAVORITE_SONG = gql`
-  mutation removeFavoriteSong($profileId: ID!, $songId: ID!) {
-    removeFavoriteSong(profileId: $profileId, songId: $songId) {
+  mutation removeFavoriteSong($songId: ID!) {
+    removeFavoriteSong(songId: $songId) {
       _id
-      name
       favoriteSongs {
         _id
         title
@@ -66,6 +63,8 @@ export const REMOVE_FAVORITE_SONG = gql`
     }
   }
 `;
+
+
 
 export const REMOVE_EVENT = gql`
   mutation removeEvent($profileId: ID!, $eventId: ID!) {

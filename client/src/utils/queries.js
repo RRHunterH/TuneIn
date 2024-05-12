@@ -20,33 +20,18 @@ export const QUERY_SINGLE_PROFILE = gql`
   }
 `;
 
+
 export const QUERY_ME = gql`
   query me {
     me {
       _id
       name
-      email  
-    }
-  }
-`;
-
-export const GET_FAVORITE_SONGS = gql`
-  query getFavoriteSongs {
-    me {
-      _id
+      email
       favoriteSongs {
         _id
         title
         artist
       }
-    }
-  }
-`;
-
-export const GET_FAVORITE_EVENTS = gql`
-  query getFavoriteEvents {
-    me {
-      _id
       favoriteEvents {
         _id
         eventName
@@ -56,3 +41,4 @@ export const GET_FAVORITE_EVENTS = gql`
     }
   }
 `;
+
