@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_FAVORITE_SONG, REMOVE_FAVORITE_SONG } from "../../utils/mutations";
-import { QUERY_ME } from "../../utils/queries";
 import AuthService from '../../utils/auth';
 
 const FavoriteButton = ({ songId, title, artist, isFavoriteInitially }) => {
   const [isFavorite, setIsFavorite] = useState(isFavoriteInitially);
   const [userProfileId, setUserProfileId] = useState(null);
 
-  // Prepare mutations
+  useEffect(() => {
+    const profile = AuthService.getProfile();
+    if (profile && profile._id) {
+      setUserProfileId(profile._id);
+      console.log("UserProfileId set:", profile._id);
+    } else {
+      console.log("UserProfileId is not available.");
+    }
+  }, []);
+
   const [addFavoriteSong] = useMutation(ADD_FAVORITE_SONG, {
     variables: { profileId: userProfileId, songId, title, artist },
     refetchQueries: [{ query: QUERY_ME }],
@@ -23,23 +31,18 @@ const FavoriteButton = ({ songId, title, artist, isFavoriteInitially }) => {
     onCompleted: () => setIsFavorite(false)
   });
 
-  // Set the user profile ID from AuthService on component mount
-  useEffect(() => {
-    const profile = AuthService.getProfile();
-    if (profile && profile._id) {
-      setUserProfileId(profile._id);
-    }
-  }, []);
-
   const handleToggleFavorite = async () => {
+    console.log("Trying to add favorite for profile:", userProfileId);
     if (!userProfileId) {
       console.error("UserProfileId is not available.");
       return;
     }
 
     if (isFavorite) {
+      console.log("Removing favorite...");
       await removeFavoriteSong();
     } else {
+      console.log("Adding favorite...");
       await addFavoriteSong();
     }
   };
@@ -52,3 +55,5 @@ const FavoriteButton = ({ songId, title, artist, isFavoriteInitially }) => {
 };
 
 export default FavoriteButton;
+
+

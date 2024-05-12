@@ -24,15 +24,20 @@ export const LOGIN_USER = gql`
   }
 `;
 
+
 export const ADD_FAVORITE_SONG = gql`
-  mutation AddFavoriteSong($songId: ID!) {
-    addFavoriteSong(songId: $songId) {
-      id
-      title
-      artist
+  mutation AddFavoriteSong($profileId: ID!, $songId: ID!, $songTitle: String!, $artist: String!) {
+    addFavoriteSong(profileId: $profileId, songId: $songId, songTitle: $songTitle, artist: $artist) {
+      _id
+      favoriteSongs {
+        _id
+        title
+        artist
+      }
     }
   }
 `;
+
 
 
 
