@@ -24,9 +24,8 @@ export const LOGIN_USER = gql`
   }
 `;
 
-
 export const ADD_FAVORITE_SONG = gql`
-  mutation AddFavoriteSong($profileId: ID!, $songId: ID!, $songTitle: String!, $artist: String!) {
+  mutation addFavoriteSong($profileId: ID!, $songId: ID!, $songTitle: String!, $artist: String!) {
     addFavoriteSong(profileId: $profileId, songId: $songId, songTitle: $songTitle, artist: $artist) {
       _id
       favoriteSongs {
@@ -38,27 +37,9 @@ export const ADD_FAVORITE_SONG = gql`
   }
 `;
 
-
-
-
-export const ADD_EVENT = gql`
-  mutation addEvent($profileId: ID!, $eventName: String!, $eventDate: String!, $location: String!) {
-    addEvent(profileId: $profileId, eventName: $eventName, eventDate: $eventDate, location: $location) {
-      _id
-      name
-      events {
-        _id
-        name
-        date
-        location
-      }
-    }
-  }
-`;
-
 export const REMOVE_FAVORITE_SONG = gql`
-  mutation removeFavoriteSong($songId: ID!) {
-    removeFavoriteSong(songId: $songId) {
+  mutation removeFavoriteSong($profileId: ID!, $songId: ID!) {
+    removeFavoriteSong(profileId: $profileId, songId: $songId) {
       _id
       favoriteSongs {
         _id
@@ -69,20 +50,32 @@ export const REMOVE_FAVORITE_SONG = gql`
   }
 `;
 
-
-
-export const REMOVE_EVENT = gql`
-  mutation removeEvent($profileId: ID!, $eventId: ID!) {
-    removeEvent(profileId: $profileId, eventId: $eventId) {
+export const ADD_EVENT = gql`
+  mutation addEvent($profileId: ID!, $eventName: String!, $eventDate: String!, $location: String!) {
+    addEvent(profileId: $profileId, eventName: $eventName, eventDate: $eventDate, location: $location) {
       _id
-      name
       events {
         _id
-        name
-        date
+        eventName
+        eventDate
         location
       }
     }
   }
 `;
+
+export const REMOVE_EVENT = gql`
+  mutation removeEvent($profileId: ID!, $eventId: ID!) {
+    removeEvent(profileId: $profileId, eventId: $eventId) {
+      _id
+      events {
+        _id
+        eventName
+        eventDate
+        location
+      }
+    }
+  }
+`;
+
 
