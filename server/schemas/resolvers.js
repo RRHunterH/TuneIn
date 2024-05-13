@@ -12,6 +12,7 @@ const resolvers = {
       return Profile.findById(profileId);
     },
     me: async (parent, args, context) => {
+      console.log(context);
       if (!context.user) {
         throw new AuthenticationError('Not authenticated');
       }
