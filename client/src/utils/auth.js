@@ -6,6 +6,10 @@ class AuthService {
     return token ? decode(token).data : null;
   }
 
+  getToken() {
+    return localStorage.getItem('id_token');
+  }
+
   loggedIn() {
     const token = this.getToken();
     return !!token && !this.isTokenExpired(token);
@@ -18,10 +22,6 @@ class AuthService {
     } catch (err) {
       return false;
     }
-  }
-
-  getToken() {
-    return localStorage.getItem('id_token');
   }
 
   login(idToken) {
