@@ -46,9 +46,9 @@ TuneIn is an app that was created for the purpose of finding music & events for 
 
 ## Links
 
-- Deployed:
+- Deployed Application in Render:
 
-- GitHub:
+- Project Repo: https://github.com/RRHunterH/TuneIn
 
 ## Technologies Used
 
@@ -78,11 +78,11 @@ To install the application, follow the steps below:
 
 ## Initialize Application
 
-To initialize the application, be sure all necessary packages have been installed in your package.json file. Then, open the application's integrated terminal and run:
+To initialize the application in your localhost, be sure all necessary packages have been installed in your package.json file. Then, open the application's integrated terminal and run:
 
         npm run dev
 
-Vite will automatically open the application on your Live Server.
+Vite will automatically open the application on your Live Server in your localhost.
 
 ## Future Development
 
@@ -101,15 +101,19 @@ Vite will automatically open the application on your Live Server.
 
 ## Challenges
 
-1. Ensuring naming conventions of the variables throughout the application were the same became very confusing very quickly.
-2. Successfully running authorization and the favorited songs on the front-end and saving both data on the back-end became a very sensitive challenge as they both intermingled in naming conventions and overall functionality
+1. The songId wasn't being properly read from our API to the application
+2. Ensuring naming conventions of the variables throughout the application were the same became very confusing very quickly.
+3. Successfully running authorization and the favorited songs on the front-end and saving both data on the back-end became a very sensitive challenge as they both intermingled in naming conventions and overall functionality
+4. Deploying application to Render
 
 ## Lessons Learned
 
 1. Remaining patient and keeping a detailed eye goes a long way
-2. Using GraphQL to address errors
-3. Creating a full-stack application from scratch
+2. Using GraphQL and MongoDB to address errors
+3. Creating a MERN Stack application from scratch
 4. Using MongoDB to debug server-side errors
+5. Learned how to deploy to Render
+6. Group-think to address errors is very powerful as every team member has different strengths
 
 ## Collaborators
 
@@ -121,6 +125,6 @@ Vite will automatically open the application on your Live Server.
 - [Katelynn McManus](https://github.com/KatelynnMM)
 - [Austin Lewandowski](https://github.com/austin109lew)
 
-Thank you for viewing our application!
+Thank you for visiting our application!
 
 2024 TuneIn
