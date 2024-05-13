@@ -44,12 +44,12 @@ const resolvers = {
       }
       const updatedProfile = await Profile.findByIdAndUpdate(
         profileId,
-        { $addToSet: { favoriteSongs: { _id: new ObjectId(songId), title: songTitle, artist } } },
+        { $addToSet: { favoriteSongs: { title: songTitle, artist } } },
         { new: true, runValidators: true }
       );
       return updatedProfile;
     },
-    removeFavoriteSong: async (parent, { profileId, songId }, context) => {
+    removeFavoriteSong: async (parent, { profileId, songTitle, artist }, context) => {
       if (!context.user) {
         throw new AuthenticationError('Not authenticated');
       }
