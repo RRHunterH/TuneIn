@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const profileSchema = new Schema({
@@ -21,22 +21,21 @@ const profileSchema = new Schema({
   },
   favoriteSongs: [
     {
-      _id: Schema.Types.ObjectId, // Ensure there is a unique identifier
+      _id: { type: Schema.Types.ObjectId, auto: true },
       title: String,
-      artist: String,
+      artist: String
     }
   ],
   events: [
     {
-      _id: Schema.Types.ObjectId, // Ensure there is a unique identifier
+      _id: { type: Schema.Types.ObjectId, auto: true },
       eventName: String,
       eventDate: String,
-      location: String,
+      location: String
     }
   ]
 });
 
-// Set up pre-save middleware to create password
 profileSchema.pre('save', async function (next) {
   if (this.isNew || this.isModified('password')) {
     const saltRounds = 10;
@@ -45,7 +44,6 @@ profileSchema.pre('save', async function (next) {
   next();
 });
 
-// Compare the incoming password with the hashed password
 profileSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
