@@ -14,7 +14,12 @@ function SearchResult({ results }) {
             </div>
           </div>
           <div style={{ marginTop: '10px', textAlign: 'right' }}>
-            <FavoriteButton songId={result.result.id} /> {/* Pass necessary props */}
+            <FavoriteButton
+              songId={result.result.id.toString()}
+              songTitle={result.result.title}
+              artist={result.result.primary_artist.name}
+              isFavoriteInitially={false}  
+            />
           </div>
         </div>
       ))}
