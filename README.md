@@ -2,7 +2,7 @@
 
 ## What is TuneIn?
 
-TuneIn is an app that was created for the purpose of finding music & events for your favorite artists!
+TuneIn is an app that was created for the purpose of finding music for your favorite artists! Deployed on Render, this MERN-stack single-page application uses MongoDB back end, GraphQL API, and Express.js and Node.js server. It combines with a REACT front end and JWT user authentiation to build a user-focused platform.
 
 ## Table of Contents
 
