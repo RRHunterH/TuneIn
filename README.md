@@ -39,8 +39,6 @@ TuneIn is an app that was created for the purpose of finding music & events for 
 - GIVEN I know the artist
 - WHEN I type the artist's name into the Live Event Search
 - THEN I am presented with a list of upcoming shows for that artist
-- GIVEN I am logged in
-- THEN I can click on the heart to save the event to my profile
 - WHEN I click on the the show I am interested in
 - THEN I am taken to the TicketMaster website where I can shop and purchase tickets
 
